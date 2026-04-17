@@ -7,7 +7,7 @@ Uso:
 Configuración:
     Modifica las variables de abajo para cambiar el mapa.
 """
-
+# Ajuste final del comportamiento del agente
 from entorno import GridWorld
 from mi_agente import MiAgente
 
@@ -36,3 +36,4 @@ agente = MiAgente()
 
 # Ejecutar con animación
 resultado = mundo.animar(agente, max_pasos=MAX_PASOS, velocidad=VELOCIDAD)
+print("Versión final del agente")
