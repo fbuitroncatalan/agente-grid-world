@@ -47,7 +47,9 @@ class MiAgente(Agente):
 
     def __init__(self):
         super().__init__(nombre="Mi Agente")
-        self.visitados = set()
+        self.visitas = set()
+        self.ultima_accion = None
+        self.ACCIONES = ['arriba', 'abajo', 'izquierda', 'derecha']
         # Puedes agregar atributos aquí si los necesitas.
         # Ejemplo:
         #   self.pasos = 0
@@ -82,40 +84,39 @@ class MiAgente(Agente):
         #     return horiz
         #
         # return 'abajo'
-        pos = percepcion['posicion']
-        self.visitados.add(pos)
 
-        # 1. Si la meta está al lado → ir directo
+        pos = percepcion['posicion']
+        self.visitas.add(pos)
+
+        opuesto = {
+            'arriba': 'abajo',
+            'abajo': 'arriba',
+            'izquierda': 'derecha',
+            'derecha': 'izquierda'
+        }
+
         for direccion in self.ACCIONES:
-            if percepcion[direccion] == 'meta':
+            if percepcion.get(direccion) == 'meta':
+                self.ultima_accion = direccion
                 return direccion
 
-        # 2. Usar direccion_meta (brújula)
         vert, horiz = percepcion['direccion_meta']
 
-        if vert != 'ninguna':
-            if percepcion[vert] == 'libre':
-                return vert
-
-        if horiz != 'ninguna':
-            if percepcion[horiz] == 'libre':
-                return horiz
-
-        # 3. Evitar repetir posiciones
-        for direccion in self.ACCIONES:
-            if percepcion[direccion] == 'libre':
-                nueva_pos = self._mover(pos, direccion)
-                if nueva_pos not in self.visitados:
+        for direccion in [vert, horiz]:
+            if percepcion.get(direccion) == 'libre':
+                if self.ultima_accion is None or direccion != opuesto[self.ultima_accion]:
+                    self.ultima_accion = direccion
                     return direccion
 
-        # 4. Si no hay opción → moverse a cualquier libre
         for direccion in self.ACCIONES:
-            if percepcion[direccion] == 'libre':
+            if percepcion.get(direccion) == 'libre':
+                if self.ultima_accion is None or direccion != opuesto[self.ultima_accion]:
+                    self.ultima_accion = direccion
+                    return direccion
+
+        for direccion in self.ACCIONES:
+            if percepcion.get(direccion) == 'libre':
+                self.ultima_accion = direccion
                 return direccion
 
-        # 5. Último recurso
         return 'abajo'
-
-    def _mover(self, pos, direccion):
-        dr, dc = self.DELTAS[direccion]
-        return (pos[0] + dr, pos[1] + dc)

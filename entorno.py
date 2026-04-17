@@ -7,7 +7,7 @@ entorno.py — Entorno Grid World con animación.
 ║    - Qué debe retornar en 'decidir()'            ║
 ╚══════════════════════════════════════════════════╝
 """
-
+# Ajuste del entorno del grid world
 import random
 import copy
 import time

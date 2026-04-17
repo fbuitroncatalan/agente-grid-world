@@ -11,7 +11,7 @@ Configuración:
 from entorno import GridWorld
 from mi_agente import MiAgente
 
-# ── Configuración del mapa ───────────────────────
+# Configuración del mapa
 FILAS     = 10       # Alto del mapa
 COLUMNAS  = 10       # Ancho del mapa
 SEMILLA   = 42       # Cambiar para generar otro mapa
